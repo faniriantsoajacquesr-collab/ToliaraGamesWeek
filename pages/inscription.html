@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="fr"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Inscription | ROAD TO THE FINALS ToGW 2026</title>
+<link rel="icon" href="../assets/ToGW.png">
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="../assets/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-lowest": "#000000",
+              "on-secondary": "#00414f",
+              "primary": "#84fe58",
+              "error-container": "#9f0519",
+              "primary-fixed": "#84fe58",
+              "on-surface-variant": "#a3aac9",
+              "outline": "#6d7491",
+              "on-tertiary": "#006a69",
+              "tertiary": "#e3fffd",
+              "outline-variant": "#3f4762",
+              "on-tertiary-fixed-variant": "#006e6d",
+              "surface-container-highest": "#192447",
+              "on-primary-container": "#072900",
+              "surface-dim": "#050d25",
+              "tertiary-dim": "#7bdfdd",
+              "tertiary-container": "#98fcf9",
+              "tertiary-fixed": "#9bfffc",
+              "on-primary-fixed": "#134a00",
+              "primary-container": "#40b810",
+              "primary-fixed-dim": "#77ef4b",
+              "on-primary": "#1a5f00",
+              "on-secondary-fixed": "#003a47",
+              "on-secondary-fixed-variant": "#00586b",
+              "inverse-on-surface": "#4d546f",
+              "tertiary-fixed-dim": "#8df0ee",
+              "inverse-surface": "#faf8ff",
+              "error": "#ff716c",
+              "inverse-primary": "#206e00",
+              "background": "#050d25",
+              "primary-dim": "#77ef4b",
+              "secondary-fixed": "#77dfff",
+              "on-tertiary-fixed": "#004f4e",
+              "on-background": "#dfe4ff",
+              "secondary-dim": "#28c0e4",
+              "secondary": "#40cef3",
+              "secondary-container": "#00677d",
+              "secondary-fixed-dim": "#48d3f8",
+              "surface-variant": "#192447",
+              "on-surface": "#dfe4ff",
+              "on-tertiary-container": "#006160",
+              "surface-container-low": "#09122c",
+              "surface-container-high": "#131e3e",
+              "on-primary-fixed-variant": "#1e6a00",
+              "on-error-container": "#ffa8a3",
+              "surface": "#050d25",
+              "on-secondary-container": "#edfaff",
+              "on-error": "#490006",
+              "error-dim": "#d7383b",
+              "surface-bright": "#1e2a50",
+              "surface-container": "#0e1835",
+              "surface-tint": "#84fe58"
+            },
+            fontFamily: {
+              "headline": ["Space Grotesk"],
+              "body": ["Manrope"],
+              "label": ["Space Grotesk"]
+            },
+            borderRadius: {"DEFAULT": "0rem", "lg": "0rem", "xl": "0rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .text-glow-primary { text-shadow: 0 0 15px rgba(132, 254, 88, 0.4); }
+        .text-glow-secondary { text-shadow: 0 0 15px rgba(64, 206, 243, 0.4); }
+        .bg-glass { backdrop-filter: blur(20px); }
+        
+        /* Custom form styles */
+        .form-input {
+            background-color: #131e3e;
+            border: 1px solid rgba(63, 70, 98, 0.3);
+            color: #dfe4ff;
+            border-radius: 0;
+            padding: 0.75rem 1rem;
+            outline: none;
+            transition: all 300ms;
+        }
+        
+        .form-input:focus {
+            border-color: #84fe58;
+            box-shadow: 0 0 0 1px rgba(132, 254, 88, 0.3);
+        }
+        
+        .form-input::placeholder {
+            color: rgba(163, 172, 201, 0.5);
+        }
+        
+        .checkbox-custom {
+            accent-color: #84fe58;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 h-20 bg-[#09122c]/60 backdrop-blur-xl border-b border-[#40cef3]/20 flex justify-between items-center px-8 max-w-full shadow-[0_20px_40px_rgba(64,206,243,0.08)]">
+<div class="flex items-center gap-4">
+<a href="../index.html" class="flex items-center gap-4 text-2xl font-black text-[#40cef3] tracking-widest font-['Space_Grotesk'] hover:text-primary transition-colors">
+<img src="../assets/ToGW.png" alt="ToGW Logo" class="h-16 w-auto">
+Toliara Games Week
+</a>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#accueil">ACCUEIL</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#circuit">CIRCUIT</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#evenements">ÉVÉNEMENTS</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#classement">CLASSEMENT</a>
+<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#contact">CONTACT</a>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="relative min-h-96 flex items-center pt-32 pb-16 overflow-hidden bg-gradient-to-b from-surface-container-highest to-surface">
+<div class="absolute inset-0 opacity-20">
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-secondary/10 rounded-full blur-[120px]"></div>
+</div>
+<div class="container mx-auto px-8 relative z-10">
+<div class="max-w-3xl">
+<span class="inline-block px-4 py-1 bg-primary text-on-primary-container font-bold text-sm tracking-[0.2em] mb-6 uppercase">REJOINS LA COMPÉTITION</span>
+<h1 class="font-black font-headline leading-none uppercase tracking-tighter mb-6 italic text-5xl md:text-7xl">
+FORMULAIRE D'<br/>
+<span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">INSCRIPTION</span>
+</h1>
+<p class="text-lg md:text-xl font-medium text-on-surface-variant max-w-2xl">
+Inscrivez-vous maintenant pour participer au Matchranking du 04 Avril et faire vos preuves !
+</p>
+</div>
+</div>
+</section>
+
+<!-- Inscription Form Section -->
+<section class="py-24 bg-surface relative">
+<div class="container mx-auto px-8">
+<div class="max-w-3xl mx-auto">
+<!-- Form Container -->
+<div class="bg-surface-container-low border border-outline-variant/20 p-12 shadow-2xl">
+<form id="inscriptionForm" class="space-y-8">
+
+<!-- Nom et Prénom Section -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
+Nom <span class="text-error">*</span>
+</label>
+<input type="text" name="nom" placeholder="Votre nom de famille" class="form-input w-full text-[#000000]" required/>
+</div>
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
+Prénom <span class="text-error">*</span>
+</label>
+<input type="text" name="prenom" placeholder="Votre prénom" class="form-input w-full text-[#000000]" required/>
+</div>
+</div>
+
+<!-- Pseudo -->
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-secondary mb-3">
+Pseudo (Optionnel)
+</label>
+<input type="text" name="pseudo" placeholder="Votre pseudo / nom de gamer" class="form-input w-full text-[#000000]"/>
+<p class="text-xs text-on-surface-variant/90 mt-2">Le pseudo utilisé pour les tournois (ex: KingFighter2026)</p>
+</div>
+
+<!-- Adresse -->
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
+Adresse <span class="text-error">*</span>
+</label>
+<input type="text" name="adresse" placeholder="Rue, quartier, arrondissement" class="form-input w-full text-[#000000]" required/>
+<p class="text-xs text-on-surface-variant/90 mt-2">Adresse complète à Toliara</p>
+</div>
+
+<!-- Téléphone et Email -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
+Numéro Téléphone <span class="text-error">*</span>
+</label>
+<input type="tel" name="telephone" placeholder="+261 XX XXX XX XX" class="form-input w-full text-[#000000]" required/>
+</div>
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-secondary mb-3">
+Adresse Email (Optionnel)
+</label>
+<input type="email" name="email" placeholder="votre.email@exemple.com" class="form-input w-full text-[#000000]"/>
+</div>
+</div>
+
+<!-- Divider -->
+<div class="border-t border-outline-variant/20 my-8"></div>
+
+<!-- Conditions et Règles -->
+<div class="space-y-6">
+<div class="flex items-start gap-4">
+<input type="checkbox" id="condition1" name="condition1" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
+<label for="condition1" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-primary">Je m'engage à payer les frais d'inscription de 2.000 Ar</span> le jour convenu pour confirmer mon entrée. <span class="text-error font-semibold">Si je ne paie pas mes frais d'inscription, mon code QR ne sera pas valide</span>, ce qui entraînera mon non-participation aux activités du tournoi.
+</label>
+</div>
+
+<div class="flex items-start gap-4">
+<input type="checkbox" id="condition2" name="condition2" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
+<label for="condition2" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-secondary">Je m'engage à conserver mon invitation (QR code)</span> et la présenter le jour du tournoi. En cas de perte, je n'aurai pas accès à l'événement.
+</label>
+</div>
+
+<div class="flex items-start gap-4">
+<input type="checkbox" id="condition3" name="condition3" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
+<label for="condition3" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-primary">Je m'engage à respecter les règles officielles du tournoi</span> Tekken 8 et les décisions de l'arbitrage. Tout non-respect sera sanctionné.
+</label>
+</div>
+
+<div class="flex items-start gap-4">
+<input type="checkbox" id="condition4" name="condition4" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
+<label for="condition4" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-secondary">Je m'engage à ne pas faire de carnage ou de dégâts</span> aux installations, au matériel informatique ou aux équipements du tournoi. Tout dommage sera à ma charge.
+</label>
+</div>
+
+<div class="flex items-start gap-4">
+<input type="checkbox" id="condition5" name="condition5" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
+<label for="condition5" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-primary">Je m'engage à ne pas fumer ni boire dans la salle de tournoi.</span> Ces activités doivent se dérouler à l'extérieur selon les zones désignées.
+</label>
+</div>
+
+<!-- Règlement Link -->
+<div class="bg-surface-container-highest border border-primary/30 p-6 rounded-none">
+<div class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary text-2xl flex-shrink-0 mt-1">info</span>
+<div class="text-sm">
+<p class="text-on-surface-variant">
+En cochant ces cases, vous acceptez de respecter le <span class="text-primary font-bold">code de conduite</span> et les <span class="text-primary font-bold">règlements officiels</span> du ROAD TO THE FINALS. Pour plus d'informations, consultez notre <a href="../index.html#reglements" class="text-secondary hover:text-primary transition-colors underline">page des règlements</a>.
+</p>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Divider -->
+<div class="border-t border-outline-variant/20 my-8"></div>
+
+<!-- Submit Buttons -->
+<div class="flex flex-col md:flex-row gap-4 pt-6">
+<button type="submit" class="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-black uppercase tracking-[0.15em] text-base flex items-center justify-center gap-3 hover:scale-105 transition-transform duration-300 shadow-lg shadow-primary/20">
+<span>SOUMETTRE MON INSCRIPTION</span>
+<span class="material-symbols-outlined">send</span>
+</button>
+<button type="reset" class="flex-1 py-4 bg-surface-container-high border border-outline-variant/50 text-on-surface font-black uppercase tracking-[0.15em] text-base hover:bg-surface-container-highest transition-all duration-300">
+<span>RÉINITIALISER</span>
+</button>
+</div>
+</form>
+
+<!-- Success Message (Hidden by default) -->
+<div id="successMessage" class="hidden bg-primary/20 border border-primary/50 p-6 rounded-none text-center">
+<div class="flex items-center justify-center gap-3 mb-3">
+<span class="material-symbols-outlined text-primary text-3xl">check_circle</span>
+</div>
+<h3 class="text-xl font-black text-primary uppercase mb-2">INSCRIPTION RÉUSSIE !</h3>
+<p class="text-on-surface text-sm mb-4">Merci d'avoir rejoint le ROAD TO THE FINALS. Voici votre code QR d'inscription :</p>
+<div class="mb-4">
+<div id="qrCodeContainer" class="inline-block p-4 bg-white rounded-none"></div>
+</div>
+<p class="text-on-surface text-xs mb-4">Code: <span id="userCode" class="font-bold text-primary"></span></p>
+<div class="flex gap-3 justify-center">
+<button onclick="downloadQRCode()" class="px-4 py-2 bg-secondary text-on-secondary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">download</span>
+Télécharger QR
+</button>
+<button onclick="redirectToHome()" class="px-4 py-2 bg-primary text-on-primary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300">
+Continuer vers l'accueil
+</button>
+</div>
+</div>
+
+<!-- Duplicate Message (Hidden by default) -->
+<div id="duplicateMessage" class="hidden bg-error/20 border border-error/50 p-6 rounded-none text-center">
+  <div class="flex items-center justify-center gap-3 mb-3">
+    <span class="material-symbols-outlined text-error text-3xl">warning</span>
+  </div>
+  <h3 class="text-xl font-black text-error uppercase mb-2">DÉJÀ INSCRIT !</h3>
+  <p class="text-on-surface text-sm mb-4">Cette personne est déjà inscrite au tournoi. Si c'est une erreur, contactez l'organisation.</p>
+  <button onclick="redirectToHome()" class="px-6 py-3 bg-error text-on-error font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform duration-300">
+    Retour à l'accueil
+  </button>
+</div>
+</div>
+
+<!-- Info Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+<div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
+<span class="material-symbols-outlined text-primary text-4xl block mb-4">schedule</span>
+<h3 class="text-sm font-black uppercase tracking-widest mb-3">DATE DU TOURNOI</h3>
+<p class="text-lg font-bold text-on-surface">04 Avril 2026</p>
+<p class="text-xs text-on-surface-variant mt-2">09:00 - 16:00 GMT+3</p>
+</div>
+
+<div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
+<span class="material-symbols-outlined text-secondary text-4xl block mb-4">location_on</span>
+<h3 class="text-sm font-black uppercase tracking-widest mb-3">LIEU</h3>
+<p class="text-lg font-bold text-on-surface">Greentsika</p>
+<p class="text-xs text-on-surface-variant mt-2">Ampasikibo - Toliara</p>
+</div>
+
+<div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
+<span class="material-symbols-outlined text-primary text-4xl block mb-4">payments</span>
+<h3 class="text-sm font-black uppercase tracking-widest mb-3">FRAIS D'INSCRIPTION</h3>
+<p class="text-lg font-bold text-on-surface">2.000 Ar</p>
+<p class="text-xs text-on-surface-variant mt-2">Par combattant</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-[#050d25] w-full py-12 px-8 border-t border-[#192447]">
+  <!-- Partenaires et Organisateurs -->
+  <div class="mb-8">
+    <h3 class="text-[#40cef3] font-bold font-headline uppercase tracking-widest text-center mb-6">PARTENAIRES ET ORGANISATEURS</h3>
+    <div class="flex flex-wrap justify-center gap-8">
+        <div class="flex flex-col items-center gap-2">
+        <img src="../assets/mahavelo.png" alt="Association Mahavelo" class="h-12 w-auto rounded">
+        <span class="text-white/70 text-sm">Association Mahavelo</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <img src="../assets/greentsika.png" alt="Greentsika" class="h-12 w-auto rounded">
+        <span class="text-white/70 text-sm">Greentsika</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <img src="../assets/Tekken Madagascar.png" alt="Tekken Madagascar" class="h-12 w-auto rounded">
+        <span class="text-white/70 text-sm">Tekken Madagascar</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <img src="../assets/Tekken community Toliara.png" alt="Tekken Community Toliara" class="h-12 w-auto rounded">
+        <span class="text-white/70 text-sm">Tekken Community Toliara</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Contact -->
+  <div class="mb-8">
+    <h3 class="text-[#40cef3] font-bold font-headline uppercase tracking-widest text-center mb-6">CONTACT</h3>
+    <div class="flex flex-col md:flex-row justify-center gap-8 text-center">
+      <div class="flex flex-col items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-2xl">phone</span>
+        <span class="text-white/70 text-sm">Téléphone</span>
+        <a href="tel:0328980072" class="text-primary hover:text-primary-dim transition-colors">032 89 800 72</a>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+       <img src="../assets/facebook.png" alt="Facebook" class="h-6 w-auto">
+        <span class="text-white/70 text-sm">Facebook</span>
+           <a href="https://www.facebook.com/profile.php?id=61580852921142" class="text-primary hover:text-primary-dim transition-colors">Toliara Games Week</a>
+            <a href="https://www.facebook.com/profile.php?id=61587385534891" class="text-primary hover:text-primary-dim transition-colors">Tekken Community Toliara</a>
+    </div>
+      <div class="flex flex-col items-center gap-2">
+        <span class="material-symbols-outlined text-secondary text-2xl">email</span>
+        <span class="text-white/70 text-sm">Email</span>
+        <a href="mailto:faniriantsoajacquesr@gmail.com" class="text-primary hover:text-primary-dim transition-colors">faniriantsoajacquesr@gmail.com</a>
+        <span class="text-white/50 text-xs">(Directeur de projet)</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Copyright et Liens -->
+  <div class="flex flex-col md:flex-row justify-between items-center gap-8 border-t border-[#192447] pt-8">
+    <div class="flex flex-col items-center md:items-start gap-2">
+      <span class="text-[#40cef3] font-bold font-headline uppercase tracking-widest">ROAD TO THE FINALS</span>
+      <p class="text-white/50 font-['Manrope'] text-[10px] uppercase tracking-widest text-center md:text-left">
+        © 2026 Toliara Games Week. Tous droits réservés. Conception et développement par Faniriantsoa Jacques R.
+      </p>
+    </div>
+    <div class="flex gap-8">
+      <a class="font-['Manrope'] text-sm uppercase tracking-widest text-white/50 hover:text-[#84fe58] transition-colors" href="#contact">CONTACT</a>
+      <a class="font-['Manrope'] text-sm uppercase tracking-widest text-white/50 hover:text-[#84fe58] transition-colors" href="#partenaires">PARTENAIRES</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Fonction pour générer un code unique
+function generateUniqueCode() {
+  const randomNum = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
+  return 'MR' + randomNum;
+}
+
+// Fonction pour télécharger le QR code
+function downloadQRCode() {
+  const canvas = document.querySelector('#qrCodeContainer canvas');
+  if (!canvas) {
+    alert('QR Code non généré. Veuillez réessayer.');
+    return;
+  }
+  
+  const link = document.createElement('a');
+  link.download = `qr-code-${document.getElementById('userCode').textContent}.png`;
+  link.href = canvas.toDataURL();
+  link.click();
+}
+
+// Fonction de redirection
+function redirectToHome() {
+  window.location.href = '../index.html#evenements';
+}
+
+// URL Google Apps Script
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyoZBJP5masTQOcLO3RtAVAor8iMtwYaMG0akHxL1Frn4KyWqFTthTkO8_QvBN_2r-5xQ/exec';
+
+// Gestion du formulaire d'inscription
+const form = document.getElementById('inscriptionForm');
+const successMessage = document.getElementById('successMessage');
+const duplicateMessage = document.getElementById('duplicateMessage');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  // Générer un code unique
+  const uniqueCode = generateUniqueCode();
+  
+  // Récupérer les données du formulaire
+  const now = new Date();
+  const formData = {
+    nom: document.querySelector('input[name="nom"]').value,
+    prenom: document.querySelector('input[name="prenom"]').value,
+    pseudo: document.querySelector('input[name="pseudo"]').value || 'Non fourni',
+    adresse: document.querySelector('input[name="adresse"]').value,
+    telephone: document.querySelector('input[name="telephone"]').value,
+    email: document.querySelector('input[name="email"]').value || 'Non fourni',
+    dateInscription: now.toLocaleDateString('fr-FR'),
+    heureInscription: now.toLocaleTimeString('fr-FR'),
+    Code: uniqueCode // On garde uniquement la clé attendue par le script
+  };
+  
+  console.log('Données du formulaire:', formData);
+  
+  // Vérifier les doublons côté client (localStorage)
+  const existingInscriptions = JSON.parse(localStorage.getItem('togw_inscriptions') || '[]');
+  const isDuplicate = existingInscriptions.some(inscription => {
+    return inscription.nom === formData.nom && 
+           inscription.prenom === formData.prenom && 
+           inscription.telephone === formData.telephone;
+  });
+  
+  if (isDuplicate) {
+    // Afficher le message de doublon
+    form.classList.add('hidden');
+    duplicateMessage.classList.remove('hidden');
+    console.log('Doublon détecté côté client');
+    return;
+  }
+  
+  // Générer le QR code
+  const qrContainer = document.getElementById('qrCodeContainer');
+  const userCodeElement = document.getElementById('userCode');
+  
+  // Nettoyer le conteneur et créer l'élément canvas requis par la bibliothèque
+  qrContainer.innerHTML = '';
+  const canvas = document.createElement('canvas');
+  qrContainer.appendChild(canvas);
+
+  QRCode.toCanvas(canvas, uniqueCode, {
+    width: 200,
+    height: 200,
+    color: {
+      dark: '#000000',
+      light: '#FFFFFF'
+    }
+  }, function (error) {
+    if (error) {
+      console.error('Erreur génération QR code:', error);
+      qrContainer.innerHTML = '<p class="text-error">Erreur génération QR code</p>';
+    } else {
+      console.log('QR code généré avec succès');
+      userCodeElement.textContent = uniqueCode;
+    }
+  });
+  
+  // Ajouter à localStorage
+  existingInscriptions.push(formData);
+  localStorage.setItem('togw_inscriptions', JSON.stringify(existingInscriptions));
+  
+  // Afficher immédiatement le message de succès
+  form.classList.add('hidden');
+  successMessage.classList.remove('hidden');
+  console.log('Message de succès affiché');
+  
+  // Envoyer les données à Google Sheets en arrière-plan
+  fetch(GOOGLE_SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {
+      'Content-Type': 'text/plain;charset=utf-8'
+    },
+    body: JSON.stringify(formData)
+  })
+  .then(() => {
+    console.log('Données envoyées avec succès à Google Sheets');
+  })
+  .catch(error => {
+    console.error('Erreur lors de l\'envoi à Google Sheets:', error);
+  });
+});
+
+// Validation en temps réel
+const inputFields = document.querySelectorAll('.form-input');
+inputFields.forEach(input => {
+  input.addEventListener('blur', function() {
+    if (this.hasAttribute('required') && this.value.trim() === '') {
+      this.classList.add('border-error');
+    } else {
+      this.classList.remove('border-error');
+    }
+  });
+});
+</script>
+</body></html>

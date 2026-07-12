@@ -13,28 +13,25 @@ function getConfig() {
 }
 
 function getDisplayAmount(ancienParticipant) {
-  const ticketType = resolveTicketType(ancienParticipant, { throwOnMissing: false });
-  if (ticketType) return Number(ticketType.price);
   const config = getConfig();
-  return ancienParticipant ? config.PRICE_RETURNING : config.PRICE_NEW;
+  if (ancienParticipant) return config.PRICE_RETURNING;
+  const ticketType = resolveTicketType({ throwOnMissing: false });
+  return ticketType ? Number(ticketType.price) : config.PRICE_NEW;
 }
 
-function resolveTicketType(ancienParticipant, options = { throwOnMissing: true }) {
+function resolveTicketType(options = { throwOnMissing: true }) {
   const config = getConfig();
-  const targetId =
-    ancienParticipant && config.TICKET_TYPE_ID_RETURNING
-      ? config.TICKET_TYPE_ID_RETURNING
-      : config.TICKET_TYPE_ID;
-
-  const ticketType = formState.ticketTypes.find((type) => String(type.id) === String(targetId));
+  const ticketType = formState.ticketTypes.find(
+    (type) => String(type.id) === String(config.TICKET_TYPE_ID)
+  );
   if (!ticketType && options.throwOnMissing) {
     const available = formState.ticketTypes
       .map((type) => `${type.name} (id ${type.id}, ${formatPrix(type.price)})`)
       .join(', ');
     throw new Error(
       available
-        ? `Le billet « ${config.TICKET_TYPE_NAME} » (id ${targetId}) est introuvable ou inactif dans ToliarEvent. Billets actifs : ${available}.`
-        : `Le billet « ${config.TICKET_TYPE_NAME} » (id ${targetId}) est introuvable ou inactif dans ToliarEvent.`
+        ? `Le billet « ${config.TICKET_TYPE_NAME} » (id ${config.TICKET_TYPE_ID}) est introuvable ou inactif dans ToliarEvent. Billets actifs : ${available}.`
+        : `Le billet « ${config.TICKET_TYPE_NAME} » (id ${config.TICKET_TYPE_ID}) est introuvable ou inactif dans ToliarEvent.`
     );
   }
   return ticketType || null;
@@ -370,7 +367,7 @@ function validateStep1(data) {
 
 function renderRecap() {
   const recap = document.getElementById('paymentRecap');
-  const ticketType = resolveTicketType(formState.data.ancien_participant, { throwOnMissing: false });
+  const ticketType = resolveTicketType({ throwOnMissing: false });
   const amount = getDisplayAmount(formState.data.ancien_participant);
   if (!recap || !formState.data) return;
 
@@ -405,7 +402,7 @@ async function loadEventTicketTypes() {
   }
 
   formState.ticketTypes = result.ticketTypes || [];
-  resolveTicketType(formState.data.ancien_participant);
+  resolveTicketType();
   return formState.ticketTypes;
 }
 
@@ -480,7 +477,7 @@ function goToStep1() {
 
 function buildPurchasePayload(paymentMethod, transactionId) {
   const data = formState.data;
-  const ticketType = resolveTicketType(data.ancien_participant);
+  const ticketType = resolveTicketType();
   const existingPlayer = getSelectedExistingPlayer();
 
   return {
@@ -491,7 +488,7 @@ function buildPurchasePayload(paymentMethod, transactionId) {
     buyer_email: data.email || null,
     buyer_address: data.ancien_participant ? null : data.adresse || null,
     transaction_id: transactionId.trim(),
-    total_amount: Number(ticketType.price),
+    total_amount: getDisplayAmount(data.ancien_participant),
     payment_method: Number(paymentMethod),
   };
 }

@@ -1,0 +1,43 @@
+/* Champs de formulaire — contraste stable au focus (override Tailwind Forms) */
+.form-input {
+  background-color: #131e3e !important;
+  border: 1px solid rgba(63, 70, 98, 0.3);
+  color: #dfe4ff !important;
+  -webkit-text-fill-color: #dfe4ff !important;
+  caret-color: #84fe58;
+  border-radius: 0;
+  padding: 0.75rem 1rem;
+  outline: none !important;
+  box-shadow: none !important;
+  --tw-ring-shadow: 0 0 #0000 !important;
+  --tw-ring-offset-shadow: 0 0 #0000 !important;
+  transition: border-color 300ms, box-shadow 300ms;
+}
+
+.form-input:hover,
+.form-input:focus,
+.form-input:focus-visible,
+.form-input:active {
+  background-color: #131e3e !important;
+  color: #dfe4ff !important;
+  -webkit-text-fill-color: #dfe4ff !important;
+}
+
+.form-input:focus,
+.form-input:focus-visible {
+  border-color: #84fe58 !important;
+  box-shadow: 0 0 0 1px rgba(132, 254, 88, 0.3) !important;
+}
+
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus,
+.form-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #dfe4ff !important;
+  box-shadow: 0 0 0 1000px #131e3e inset !important;
+  transition: background-color 9999s ease-out 0s;
+}
+
+.form-input::placeholder {
+  color: rgba(163, 172, 201, 0.5);
+}

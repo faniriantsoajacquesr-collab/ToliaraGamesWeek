@@ -93,11 +93,11 @@
         <form id="loginForm" class="space-y-5">
           <div>
             <label for="loginUsername" class="block text-sm font-black uppercase tracking-widest text-secondary mb-2">Nom d'utilisateur</label>
-            <input id="loginUsername" name="username" type="text" required autocomplete="username" class="w-full bg-surface-container-high border border-outline-variant/30 text-on-surface px-4 py-3 outline-none focus:border-primary" placeholder="username"/>
+            <input id="loginUsername" name="username" type="text" required autocomplete="username" class="form-input w-full" placeholder="username"/>
           </div>
           <div>
             <label for="loginPassword" class="block text-sm font-black uppercase tracking-widest text-primary mb-2">Mot de passe</label>
-            <input id="loginPassword" name="password" type="password" required autocomplete="current-password" class="w-full bg-surface-container-high border border-outline-variant/30 text-on-surface px-4 py-3 outline-none focus:border-primary" placeholder="••••••••"/>
+            <input id="loginPassword" name="password" type="password" required autocomplete="current-password" class="form-input w-full" placeholder="••••••••"/>
           </div>
           <p id="loginError" class="hidden text-sm text-error"></p>
           <button id="btn-submit-login" type="submit" class="w-full py-4 bg-gradient-to-br from-secondary to-secondary-container text-on-secondary font-black uppercase tracking-[0.15em] hover:scale-[1.02] transition-transform">

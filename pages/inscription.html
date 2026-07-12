@@ -5,6 +5,7 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Inscription | ROAD TO THE FINALS ToGW 2026</title>
 <link rel="icon" href="https://i.ibb.co/C5SVzkT7/To-GW.png">
+<link rel="stylesheet" href="../assets/form.css">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
@@ -84,36 +85,6 @@
         .text-glow-primary { text-shadow: 0 0 15px rgba(132, 254, 88, 0.4); }
         .text-glow-secondary { text-shadow: 0 0 15px rgba(64, 206, 243, 0.4); }
         .bg-glass { backdrop-filter: blur(20px); }
-        
-        /* Custom form styles */
-        .form-input {
-            background-color: #131e3e;
-            border: 1px solid rgba(63, 70, 98, 0.3);
-            color: #dfe4ff !important;
-            -webkit-text-fill-color: #dfe4ff;
-            caret-color: #84fe58;
-            border-radius: 0;
-            padding: 0.75rem 1rem;
-            outline: none;
-            transition: all 300ms;
-        }
-
-        .form-input:-webkit-autofill,
-        .form-input:-webkit-autofill:hover,
-        .form-input:-webkit-autofill:focus {
-            -webkit-text-fill-color: #dfe4ff;
-            box-shadow: 0 0 0 1000px #131e3e inset;
-            transition: background-color 9999s ease-out 0s;
-        }
-        
-        .form-input:focus {
-            border-color: #84fe58;
-            box-shadow: 0 0 0 1px rgba(132, 254, 88, 0.3);
-        }
-        
-        .form-input::placeholder {
-            color: rgba(163, 172, 201, 0.5);
-        }
         
         .checkbox-custom {
             accent-color: #84fe58;
@@ -362,7 +333,7 @@ En cochant ces cases, vous acceptez de respecter le <span class="text-primary fo
 <label for="transactionReference" class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
 Référence de transaction (transaction_id) <span class="text-error">*</span>
 </label>
-<input type="text" id="transactionReference" name="transaction_id" placeholder="Ex: TXN123456789" class="form-input w-full text-on-surface" required autocomplete="off"/>
+<input type="text" id="transactionReference" name="transaction_id" placeholder="Ex: TXN123456789" class="form-input w-full" required autocomplete="off"/>
 <p class="text-xs text-on-surface-variant/90 mt-2">Numéro de référence reçu après votre paiement Mobile Money</p>
 </div>
 

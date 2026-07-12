@@ -1,0 +1,13 @@
+window.TOGW_INSCRIPTION_CONFIG = {
+  API_BASE: 'https://toliarevent.onrender.com',
+  EVENT_ID: 'da4bf2be-0cd4-446e-b229-e3a9558813aa',
+  TOURNAMENT_ID: '0f9389ce-9f91-40a3-b553-123f62c52504',
+  TICKET_TYPE_ID: '5',
+  TICKET_TYPE_ID_RETURNING: null,
+  TICKET_TYPE_NAME: 'Tekken Pass',
+  PRICE_NEW: 10000,
+  PRICE_RETURNING: 8000,
+  TICKET_QR_BASE_URL: '',
+  AVATAR_BUCKET: 'profil',
+  AVATAR_MAX_SIZE_MB: 2,
+};

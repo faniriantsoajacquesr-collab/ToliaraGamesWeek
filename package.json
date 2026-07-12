@@ -1,0 +1,7 @@
+{
+  "name": "togw-website",
+  "private": true,
+  "scripts": {
+    "dev": "npx --yes serve -l 5500"
+  }
+}

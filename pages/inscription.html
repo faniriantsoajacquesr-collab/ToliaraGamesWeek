@@ -4,9 +4,9 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Inscription | ROAD TO THE FINALS ToGW 2026</title>
-<link rel="icon" href="../assets/ToGW.png">
+<link rel="icon" href="https://i.ibb.co/C5SVzkT7/To-GW.png">
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<script src="../assets/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
@@ -89,11 +89,21 @@
         .form-input {
             background-color: #131e3e;
             border: 1px solid rgba(63, 70, 98, 0.3);
-            color: #dfe4ff;
+            color: #dfe4ff !important;
+            -webkit-text-fill-color: #dfe4ff;
+            caret-color: #84fe58;
             border-radius: 0;
             padding: 0.75rem 1rem;
             outline: none;
             transition: all 300ms;
+        }
+
+        .form-input:-webkit-autofill,
+        .form-input:-webkit-autofill:hover,
+        .form-input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #dfe4ff;
+            box-shadow: 0 0 0 1000px #131e3e inset;
+            transition: background-color 9999s ease-out 0s;
         }
         
         .form-input:focus {
@@ -108,6 +118,16 @@
         .checkbox-custom {
             accent-color: #84fe58;
         }
+
+        .step-dot {
+            width: 2rem;
+            height: 2rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.875rem;
+        }
     </style>
 </head>
 <body class="bg-background text-on-background font-body selection:bg-primary selection:text-on-primary-container">
@@ -115,7 +135,7 @@
 <nav class="fixed top-0 w-full z-50 h-20 bg-[#09122c]/60 backdrop-blur-xl border-b border-[#40cef3]/20 flex justify-between items-center px-8 max-w-full shadow-[0_20px_40px_rgba(64,206,243,0.08)]">
 <div class="flex items-center gap-4">
 <a href="../index.html" class="flex items-center gap-4 text-2xl font-black text-[#40cef3] tracking-widest font-['Space_Grotesk'] hover:text-primary transition-colors">
-<img src="../assets/ToGW.png" alt="ToGW Logo" class="h-16 w-auto">
+<img src="https://i.ibb.co/C5SVzkT7/To-GW.png" alt="ToGW Logo" class="h-16 w-auto">
 Toliara Games Week
 </a>
 </div>
@@ -123,8 +143,11 @@ Toliara Games Week
 <a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#accueil">ACCUEIL</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#circuit">CIRCUIT</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#evenements">ÉVÉNEMENTS</a>
-<a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#classement">CLASSEMENT</a>
 <a class="font-['Space_Grotesk'] uppercase tracking-tighter text-white/70 hover:text-white transition-colors duration-300" href="../index.html#contact">CONTACT</a>
+</div>
+<div id="authNav" class="flex items-center gap-3">
+<button id="btn-open-login" type="button" class="font-['Space_Grotesk'] uppercase tracking-tighter text-secondary hover:text-primary transition-colors duration-300 text-sm font-black">CONNEXION</button>
+<div id="authUserBadge" class="hidden flex items-center gap-3"></div>
 </div>
 </nav>
 
@@ -140,8 +163,8 @@ Toliara Games Week
 FORMULAIRE D'<br/>
 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary pr-4">INSCRIPTION</span>
 </h1>
-<p class="text-lg md:text-xl font-medium text-on-surface-variant max-w-2xl">
-Inscrivez-vous maintenant pour participer au Matchranking du 04 Avril et faire vos preuves !
+<p id="inscriptionHeroSubtitle" class="text-lg md:text-xl font-medium text-on-surface-variant max-w-2xl">
+Inscrivez-vous maintenant pour participer au Matchranking #2 du 25 Juillet 2026 et faire vos preuves !
 </p>
 </div>
 </div>
@@ -153,6 +176,24 @@ Inscrivez-vous maintenant pour participer au Matchranking du 04 Avril et faire v
 <div class="max-w-3xl mx-auto">
 <!-- Form Container -->
 <div class="bg-surface-container-low border border-outline-variant/20 p-12 shadow-2xl">
+
+<div id="setupWarning" class="hidden mb-8 border border-error/40 bg-error-container/10 p-4 text-sm text-on-surface"></div>
+
+<!-- Indicateur d'étapes -->
+<div id="stepIndicator" class="flex items-center justify-center gap-8 mb-12">
+<div data-step-item="1" class="flex items-center gap-3 text-primary">
+<span class="step-dot bg-primary text-on-primary-container">1</span>
+<span class="text-sm font-black uppercase tracking-widest">Informations</span>
+</div>
+<div id="stepIndicatorDivider" class="w-12 h-px bg-outline-variant/40"></div>
+<div id="stepIndicatorStep2" data-step-item="2" class="flex items-center gap-3 text-on-surface-variant">
+<span class="step-dot bg-outline-variant text-on-surface">2</span>
+<span class="text-sm font-black uppercase tracking-widest">Paiement</span>
+</div>
+</div>
+
+<!-- Étape 1 -->
+<div id="step1Panel">
 <form id="inscriptionForm" class="space-y-8">
 
 <!-- Nom et Prénom Section -->
@@ -161,13 +202,13 @@ Inscrivez-vous maintenant pour participer au Matchranking du 04 Avril et faire v
 <label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
 Nom <span class="text-error">*</span>
 </label>
-<input type="text" name="nom" placeholder="Votre nom de famille" class="form-input w-full text-[#000000]" required/>
+<input type="text" name="nom" placeholder="Votre nom de famille" class="form-input w-full" required/>
 </div>
 <div>
 <label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
 Prénom <span class="text-error">*</span>
 </label>
-<input type="text" name="prenom" placeholder="Votre prénom" class="form-input w-full text-[#000000]" required/>
+<input type="text" name="prenom" placeholder="Votre prénom" class="form-input w-full" required/>
 </div>
 </div>
 
@@ -176,8 +217,26 @@ Prénom <span class="text-error">*</span>
 <label class="block text-sm font-black uppercase tracking-widest text-secondary mb-3">
 Pseudo (Optionnel)
 </label>
-<input type="text" name="pseudo" placeholder="Votre pseudo / nom de gamer" class="form-input w-full text-[#000000]"/>
+<input type="text" name="pseudo" placeholder="Votre pseudo / nom de gamer" class="form-input w-full"/>
 <p class="text-xs text-on-surface-variant/90 mt-2">Le pseudo utilisé pour les tournois (ex: KingFighter2026)</p>
+</div>
+
+<!-- Avatar -->
+<div>
+<label class="block text-sm font-black uppercase tracking-widest text-secondary mb-3">
+Photo de profil (Optionnel)
+</label>
+<div class="flex flex-col sm:flex-row gap-4 items-start">
+<div id="avatarPreview" class="hidden w-24 h-24 border border-outline-variant/40 bg-surface-container-highest overflow-hidden flex-shrink-0">
+<img id="avatarPreviewImage" alt="Aperçu avatar" class="w-full h-full object-cover"/>
+</div>
+<div class="flex-1 w-full">
+<input type="file" id="avatarInput" name="avatar" accept="image/jpeg,image/png,image/webp,image/gif" class="form-input w-full text-on-surface-variant file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-primary file:text-on-primary-container file:font-black file:uppercase file:text-xs file:tracking-widest"/>
+<p class="text-xs text-on-surface-variant/90 mt-2">JPG, PNG ou WebP — 2 Mo maximum</p>
+<p id="avatarError" class="hidden text-xs text-error mt-2"></p>
+<button type="button" id="btnClearAvatar" class="hidden mt-2 text-xs font-black uppercase tracking-widest text-error hover:text-error-container transition-colors">Retirer la photo</button>
+</div>
+</div>
 </div>
 
 <!-- Adresse -->
@@ -185,7 +244,7 @@ Pseudo (Optionnel)
 <label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
 Adresse <span class="text-error">*</span>
 </label>
-<input type="text" name="adresse" placeholder="Rue, quartier, arrondissement" class="form-input w-full text-[#000000]" required/>
+<input type="text" name="adresse" placeholder="Rue, quartier, arrondissement" class="form-input w-full" required/>
 <p class="text-xs text-on-surface-variant/90 mt-2">Adresse complète à Toliara</p>
 </div>
 
@@ -195,14 +254,22 @@ Adresse <span class="text-error">*</span>
 <label class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
 Numéro Téléphone <span class="text-error">*</span>
 </label>
-<input type="tel" name="telephone" placeholder="+261 XX XXX XX XX" class="form-input w-full text-[#000000]" required/>
+<input type="tel" name="telephone" placeholder="+261 XX XXX XX XX" class="form-input w-full" required/>
 </div>
 <div>
 <label class="block text-sm font-black uppercase tracking-widest text-secondary mb-3">
 Adresse Email (Optionnel)
 </label>
-<input type="email" name="email" placeholder="votre.email@exemple.com" class="form-input w-full text-[#000000]"/>
+<input type="email" name="email" placeholder="votre.email@exemple.com" class="form-input w-full"/>
 </div>
+</div>
+
+<!-- Ancien participant -->
+<div class="flex items-start gap-4 bg-surface-container-highest/50 border border-secondary/20 p-4">
+<input type="checkbox" id="ancien_participant" name="ancien_participant" class="checkbox-custom w-5 h-5 mt-1 rounded"/>
+<label for="ancien_participant" class="text-sm text-on-surface leading-relaxed cursor-pointer">
+<span class="font-bold text-secondary">J'ai participé au 1er Matchranking</span> (tarif réduit : 8.000 Ar au lieu de 10.000 Ar)
+</label>
 </div>
 
 <!-- Divider -->
@@ -213,7 +280,7 @@ Adresse Email (Optionnel)
 <div class="flex items-start gap-4">
 <input type="checkbox" id="condition1" name="condition1" class="checkbox-custom w-5 h-5 mt-1 rounded" required/>
 <label for="condition1" class="text-sm text-on-surface leading-relaxed cursor-pointer">
-<span class="font-bold text-primary">Je m'engage à payer les frais d'inscription de 2.000 Ar</span> le jour convenu pour confirmer mon entrée. <span class="text-error font-semibold">Si je ne paie pas mes frais d'inscription, mon code QR ne sera pas valide</span>, ce qui entraînera mon non-participation aux activités.
+<span class="font-bold text-primary">Je m'engage à payer les frais d'inscription</span> (10.000 Ar pour les nouveaux, 8.000 Ar pour les anciens participants du 1er matchranking) le jour convenu pour confirmer mon entrée. <span class="text-error font-semibold">Si je ne paie pas mes frais d'inscription, mon code QR ne sera pas valide</span>, ce qui entraînera mon non-participation aux activités.
 </label>
 </div>
 
@@ -263,15 +330,58 @@ En cochant ces cases, vous acceptez de respecter le <span class="text-primary fo
 
 <!-- Submit Buttons -->
 <div class="flex flex-col md:flex-row gap-4 pt-6">
-<button type="submit" class="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-black uppercase tracking-[0.15em] text-base flex items-center justify-center gap-3 hover:scale-105 transition-transform duration-300 shadow-lg shadow-primary/20">
-<span>SOUMETTRE MON INSCRIPTION</span>
-<span class="material-symbols-outlined">send</span>
+<button type="submit" id="btnStep1Submit" class="flex-1 py-4 bg-gradient-to-br from-primary to-primary-container text-on-primary-container font-black uppercase tracking-[0.15em] text-base flex items-center justify-center gap-3 hover:scale-105 transition-transform duration-300 shadow-lg shadow-primary/20">
+<span id="btnStep1SubmitText">CONTINUER VERS LE PAIEMENT</span>
+<span class="material-symbols-outlined" id="btnStep1SubmitIcon">arrow_forward</span>
 </button>
 <button type="reset" class="flex-1 py-4 bg-surface-container-high border border-outline-variant/50 text-on-surface font-black uppercase tracking-[0.15em] text-base hover:bg-surface-container-highest transition-all duration-300">
 <span>RÉINITIALISER</span>
 </button>
 </div>
 </form>
+</div>
+
+<!-- Étape 2 -->
+<div id="step2Panel" class="hidden space-y-8">
+<div class="bg-surface-container-highest border border-secondary/20 p-6">
+<p class="text-xs font-black uppercase tracking-widest text-secondary mb-3">Récapitulatif</p>
+<div id="paymentRecap"></div>
+<div class="mt-4 pt-4 border-t border-outline-variant/20 flex items-center justify-between">
+<span class="text-sm font-black uppercase tracking-widest text-on-surface-variant">Montant à payer</span>
+<span id="paymentAmount" class="text-2xl font-black text-primary">—</span>
+</div>
+</div>
+
+<form id="paymentForm" class="space-y-6">
+<div>
+<p class="text-sm font-black uppercase tracking-widest text-secondary mb-4">Choisissez votre méthode de paiement</p>
+<div id="paymentMethodsList" class="space-y-3"></div>
+</div>
+
+<div>
+<label for="transactionReference" class="block text-sm font-black uppercase tracking-widest text-primary mb-3">
+Référence de transaction (transaction_id) <span class="text-error">*</span>
+</label>
+<input type="text" id="transactionReference" name="transaction_id" placeholder="Ex: TXN123456789" class="form-input w-full text-on-surface" required autocomplete="off"/>
+<p class="text-xs text-on-surface-variant/90 mt-2">Numéro de référence reçu après votre paiement Mobile Money</p>
+</div>
+
+<div class="bg-surface-container-highest border border-primary/30 p-4 text-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-primary align-middle mr-2">info</span>
+Effectuez le paiement vers le numéro indiqué, puis saisissez la référence de transaction pour valider votre inscription.
+</div>
+
+<div class="flex flex-col md:flex-row gap-4 pt-2">
+<button type="button" id="btnBackStep1" class="flex-1 py-4 bg-surface-container-high border border-outline-variant/50 text-on-surface font-black uppercase tracking-[0.15em] text-base hover:bg-surface-container-highest transition-all duration-300">
+<span>RETOUR</span>
+</button>
+<button type="submit" id="btnConfirmPayment" class="flex-1 py-4 bg-gradient-to-br from-secondary to-secondary-container text-on-secondary font-black uppercase tracking-[0.15em] text-base flex items-center justify-center gap-3 hover:scale-105 transition-transform duration-300 shadow-lg shadow-secondary/20">
+<span>CONFIRMER LE PAIEMENT</span>
+<span class="material-symbols-outlined">payments</span>
+</button>
+</div>
+</form>
+</div>
 
 <!-- Success Message (Hidden by default) -->
 <div id="successMessage" class="hidden bg-primary/20 border border-primary/50 p-6 rounded-none text-center">
@@ -284,15 +394,31 @@ En cochant ces cases, vous acceptez de respecter le <span class="text-primary fo
 <div id="qrCodeContainer" class="inline-block p-4 bg-white rounded-none"></div>
 </div>
 <p class="text-on-surface text-xs mb-4">Code: <span id="userCode" class="font-bold text-primary"></span></p>
+<div id="pendingPaymentNote" class="mb-6 p-4 bg-secondary/10 border border-secondary/40 text-left text-sm text-on-surface">
+<p class="font-bold text-secondary uppercase tracking-widest text-xs mb-2">Important</p>
+<p>Votre inscription est en cours de traitement. Dès que nous avons confirmé votre paiement, nous activerons votre ticket. Si vous avez utilisé une fausse référence de transaction ou si le paiement n'a pas été reçu, votre billet ne sera pas activé.</p>
+</div>
 <div class="flex gap-3 justify-center">
-<button onclick="downloadQRCode()" class="px-4 py-2 bg-secondary text-on-secondary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300 flex items-center gap-2">
+<button id="btn-download-qr" type="button" class="px-4 py-2 bg-secondary text-on-secondary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300 flex items-center gap-2">
 <span class="material-symbols-outlined text-sm">download</span>
 Télécharger QR
 </button>
-<button onclick="redirectToHome()" class="px-4 py-2 bg-primary text-on-primary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300">
+<button id="btn-home-success" type="button" class="px-4 py-2 bg-primary text-on-primary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300">
 Continuer vers l'accueil
 </button>
 </div>
+</div>
+
+<!-- Admin Success Message -->
+<div id="adminSuccessMessage" class="hidden bg-secondary/20 border border-secondary/50 p-6 rounded-none text-center">
+<div class="flex items-center justify-center gap-3 mb-3">
+<span class="material-symbols-outlined text-secondary text-3xl">how_to_reg</span>
+</div>
+<h3 class="text-xl font-black text-secondary uppercase mb-2">JOUEUR INSCRIT</h3>
+<p class="text-on-surface text-sm mb-4">Le joueur a été enregistré pour le tournoi. Le paiement sera effectué sur place le jour de l'événement.</p>
+<button id="btn-admin-new-registration" type="button" class="px-4 py-2 bg-primary text-on-primary font-black uppercase tracking-widest text-xs hover:scale-105 transition-transform duration-300">
+Inscrire un autre joueur
+</button>
 </div>
 
 <!-- Duplicate Message (Hidden by default) -->
@@ -302,8 +428,19 @@ Continuer vers l'accueil
   </div>
   <h3 class="text-xl font-black text-error uppercase mb-2">DÉJÀ INSCRIT !</h3>
   <p class="text-on-surface text-sm mb-4">Cette personne est déjà inscrite au tournoi. Si c'est une erreur, contactez l'organisation.</p>
-  <button onclick="redirectToHome()" class="px-6 py-3 bg-error text-on-error font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform duration-300">
+  <button id="btn-home-duplicate" type="button" class="px-6 py-3 bg-error text-on-error font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform duration-300">
     Retour à l'accueil
+  </button>
+</div>
+
+<div id="errorMessage" class="hidden bg-error/20 border border-error/50 p-6 rounded-none text-center">
+  <div class="flex items-center justify-center gap-3 mb-3">
+    <span class="material-symbols-outlined text-error text-3xl">error</span>
+  </div>
+  <h3 class="text-xl font-black text-error uppercase mb-2">ERREUR</h3>
+  <p id="errorMessageText" class="text-on-surface text-sm mb-4">Une erreur est survenue.</p>
+  <button id="btn-home-error" type="button" class="px-6 py-3 bg-error text-on-error font-black uppercase tracking-widest text-sm hover:scale-105 transition-transform duration-300">
+    Réessayer
   </button>
 </div>
 </div>
@@ -313,22 +450,21 @@ Continuer vers l'accueil
 <div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
 <span class="material-symbols-outlined text-primary text-4xl block mb-4">schedule</span>
 <h3 class="text-sm font-black uppercase tracking-widest mb-3">DATE DU TOURNOI</h3>
-<p class="text-lg font-bold text-on-surface">04 Avril 2026</p>
-<p class="text-xs text-on-surface-variant mt-2">09:00 - 16:00 GMT+3</p>
+<p class="text-lg font-bold text-on-surface">25 Juillet 2026</p>
+<p class="text-xs text-on-surface-variant mt-2">09h00 GMT+3</p>
 </div>
 
 <div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
 <span class="material-symbols-outlined text-secondary text-4xl block mb-4">location_on</span>
 <h3 class="text-sm font-black uppercase tracking-widest mb-3">LIEU</h3>
-<p class="text-lg font-bold text-on-surface">Greentsika</p>
-<p class="text-xs text-on-surface-variant mt-2">Ampasikibo - Toliara</p>
+<p class="text-lg font-bold text-on-surface">Salle Polyvalente Toliara</p>
 </div>
 
 <div class="bg-surface-container-high border border-outline-variant/20 p-8 text-center">
 <span class="material-symbols-outlined text-primary text-4xl block mb-4">payments</span>
 <h3 class="text-sm font-black uppercase tracking-widest mb-3">FRAIS D'INSCRIPTION</h3>
-<p class="text-lg font-bold text-on-surface">2.000 Ar</p>
-<p class="text-xs text-on-surface-variant mt-2">Par combattant</p>
+<p class="text-lg font-bold text-on-surface">10.000 Ar — nouveaux</p>
+<p class="text-xs text-on-surface-variant mt-2">8.000 Ar — anciens participants du 1er matchranking</p>
 </div>
 </div>
 </div>
@@ -341,20 +477,24 @@ Continuer vers l'accueil
     <h3 class="text-[#40cef3] font-bold font-headline uppercase tracking-widest text-center mb-6">PARTENAIRES ET ORGANISATEURS</h3>
     <div class="flex flex-wrap justify-center gap-8">
         <div class="flex flex-col items-center gap-2">
-        <img src="../assets/mahavelo.png" alt="Association Mahavelo" class="h-12 w-auto rounded">
+        <img src="https://i.ibb.co/gLnPzYGd/mahavelo.png" alt="Association Mahavelo" class="h-12 w-auto rounded">
         <span class="text-white/70 text-sm">Association Mahavelo</span>
       </div>
       <div class="flex flex-col items-center gap-2">
-        <img src="../assets/greentsika.png" alt="Greentsika" class="h-12 w-auto rounded">
+        <img src="https://i.ibb.co/zV8QWpWV/greentsika.png" alt="Greentsika" class="h-12 w-auto rounded">
         <span class="text-white/70 text-sm">Greentsika</span>
       </div>
       <div class="flex flex-col items-center gap-2">
-        <img src="../assets/Tekken Madagascar.png" alt="Tekken Madagascar" class="h-12 w-auto rounded">
+        <img src="https://i.ibb.co/VWHzwj7y/Tekken-Madagascar.png" alt="Tekken Madagascar" class="h-12 w-auto rounded">
         <span class="text-white/70 text-sm">Tekken Madagascar</span>
       </div>
       <div class="flex flex-col items-center gap-2">
-        <img src="../assets/Tekken community Toliara.png" alt="Tekken Community Toliara" class="h-12 w-auto rounded">
+        <img src="https://i.ibb.co/mrV7FxLj/Tekken-community-Toliara.png" alt="Tekken Community Toliara" class="h-12 w-auto rounded">
         <span class="text-white/70 text-sm">Tekken Community Toliara</span>
+      </div>
+      <div class="flex flex-col items-center gap-2">
+        <img src="../assets/asian-show-toliara.png" alt="Asian Show Toliara" class="h-12 w-auto rounded">
+        <span class="text-white/70 text-sm">Asian Show Toliara</span>
       </div>
     </div>
   </div>
@@ -369,7 +509,7 @@ Continuer vers l'accueil
         <a href="tel:0328980072" class="text-primary hover:text-primary-dim transition-colors">032 89 800 72</a>
       </div>
       <div class="flex flex-col items-center gap-2">
-       <img src="../assets/facebook.png" alt="Facebook" class="h-6 w-auto">
+       <img src="https://i.ibb.co/7Np7WZx8/facebook.png" alt="Facebook" class="h-6 w-auto">
         <span class="text-white/70 text-sm">Facebook</span>
            <a href="https://www.facebook.com/profile.php?id=61580852921142" class="text-primary hover:text-primary-dim transition-colors">Toliara Games Week</a>
             <a href="https://www.facebook.com/profile.php?id=61587385534891" class="text-primary hover:text-primary-dim transition-colors">Tekken Community Toliara</a>
@@ -398,140 +538,10 @@ Continuer vers l'accueil
   </div>
 </footer>
 
-<script>
-// Fonction pour générer un code unique
-function generateUniqueCode() {
-  const randomNum = Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
-  return 'MR' + randomNum;
-}
-
-// Fonction pour télécharger le QR code
-function downloadQRCode() {
-  const canvas = document.querySelector('#qrCodeContainer canvas');
-  if (!canvas) {
-    alert('QR Code non généré. Veuillez réessayer.');
-    return;
-  }
-  
-  const link = document.createElement('a');
-  link.download = `qr-code-${document.getElementById('userCode').textContent}.png`;
-  link.href = canvas.toDataURL();
-  link.click();
-}
-
-// Fonction de redirection
-function redirectToHome() {
-  window.location.href = '../index.html#evenements';
-}
-
-// URL Google Apps Script
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyoZBJP5masTQOcLO3RtAVAor8iMtwYaMG0akHxL1Frn4KyWqFTthTkO8_QvBN_2r-5xQ/exec';
-
-// Gestion du formulaire d'inscription
-const form = document.getElementById('inscriptionForm');
-const successMessage = document.getElementById('successMessage');
-const duplicateMessage = document.getElementById('duplicateMessage');
-
-form.addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  // Générer un code unique
-  const uniqueCode = generateUniqueCode();
-  
-  // Récupérer les données du formulaire
-  const now = new Date();
-  const formData = {
-    nom: document.querySelector('input[name="nom"]').value,
-    prenom: document.querySelector('input[name="prenom"]').value,
-    pseudo: document.querySelector('input[name="pseudo"]').value || 'Non fourni',
-    adresse: document.querySelector('input[name="adresse"]').value,
-    telephone: document.querySelector('input[name="telephone"]').value,
-    email: document.querySelector('input[name="email"]').value || 'Non fourni',
-    dateInscription: now.toLocaleDateString('fr-FR'),
-    heureInscription: now.toLocaleTimeString('fr-FR'),
-    Code: uniqueCode // On garde uniquement la clé attendue par le script
-  };
-  
-  console.log('Données du formulaire:', formData);
-  
-  // Vérifier les doublons côté client (localStorage)
-  const existingInscriptions = JSON.parse(localStorage.getItem('togw_inscriptions') || '[]');
-  const isDuplicate = existingInscriptions.some(inscription => {
-    return inscription.nom === formData.nom && 
-           inscription.prenom === formData.prenom && 
-           inscription.telephone === formData.telephone;
-  });
-  
-  if (isDuplicate) {
-    // Afficher le message de doublon
-    form.classList.add('hidden');
-    duplicateMessage.classList.remove('hidden');
-    console.log('Doublon détecté côté client');
-    return;
-  }
-  
-  // Générer le QR code
-  const qrContainer = document.getElementById('qrCodeContainer');
-  const userCodeElement = document.getElementById('userCode');
-  
-  // Nettoyer le conteneur et créer l'élément canvas requis par la bibliothèque
-  qrContainer.innerHTML = '';
-  const canvas = document.createElement('canvas');
-  qrContainer.appendChild(canvas);
-
-  QRCode.toCanvas(canvas, uniqueCode, {
-    width: 200,
-    height: 200,
-    color: {
-      dark: '#000000',
-      light: '#FFFFFF'
-    }
-  }, function (error) {
-    if (error) {
-      console.error('Erreur génération QR code:', error);
-      qrContainer.innerHTML = '<p class="text-error">Erreur génération QR code</p>';
-    } else {
-      console.log('QR code généré avec succès');
-      userCodeElement.textContent = uniqueCode;
-    }
-  });
-  
-  // Ajouter à localStorage
-  existingInscriptions.push(formData);
-  localStorage.setItem('togw_inscriptions', JSON.stringify(existingInscriptions));
-  
-  // Afficher immédiatement le message de succès
-  form.classList.add('hidden');
-  successMessage.classList.remove('hidden');
-  console.log('Message de succès affiché');
-  
-  // Envoyer les données à Google Sheets en arrière-plan
-  fetch(GOOGLE_SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'text/plain;charset=utf-8'
-    },
-    body: JSON.stringify(formData)
-  })
-  .then(() => {
-    console.log('Données envoyées avec succès à Google Sheets');
-  })
-  .catch(error => {
-    console.error('Erreur lors de l\'envoi à Google Sheets:', error);
-  });
-});
-
-// Validation en temps réel
-const inputFields = document.querySelectorAll('.form-input');
-inputFields.forEach(input => {
-  input.addEventListener('blur', function() {
-    if (this.hasAttribute('required') && this.value.trim() === '') {
-      this.classList.add('border-error');
-    } else {
-      this.classList.remove('border-error');
-    }
-  });
-});
-</script>
+<script src="../assets/supabase-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../assets/supabase-client.js"></script>
+<script src="../assets/auth.js"></script>
+<script src="../assets/inscription-config.js"></script>
+<script src="../assets/inscription.js"></script>
 </body></html>

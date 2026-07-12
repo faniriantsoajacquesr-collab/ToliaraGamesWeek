@@ -194,7 +194,6 @@ function setFieldsDisabled(container, disabled) {
 function updateReturningParticipantUi() {
   const returning = isReturningParticipantMode();
   const newFields = document.getElementById('newParticipantFields');
-  const conditions = document.getElementById('conditionsSection');
   const existingBlock = document.getElementById('existingPlayerBlock');
   const existingSelect = document.getElementById('existingPlayerSelect');
 
@@ -203,17 +202,12 @@ function updateReturningParticipantUi() {
   }
 
   setFieldsDisabled(newFields, returning);
-  setFieldsDisabled(conditions, returning);
 
   if (existingSelect) {
     existingSelect.disabled = !returning;
     existingSelect.required = returning;
     if (!returning) existingSelect.value = '';
   }
-
-  conditions?.querySelectorAll('input[type="checkbox"][required]').forEach((checkbox) => {
-    checkbox.required = !returning;
-  });
 
   newFields?.querySelectorAll('input[required]').forEach((input) => {
     input.required = !returning;
@@ -344,6 +338,15 @@ async function uploadPlayerAvatar(file) {
   return data.publicUrl;
 }
 
+function validateConditions() {
+  const conditions = document.querySelectorAll('#conditionsSection input[type="checkbox"][required]');
+  for (const checkbox of conditions) {
+    if (!checkbox.checked) {
+      throw new Error('Veuillez accepter toutes les conditions.');
+    }
+  }
+}
+
 function validateStep1(data) {
   if (!data.telephone) {
     throw new Error('Veuillez indiquer votre numéro de téléphone.');
@@ -353,6 +356,7 @@ function validateStep1(data) {
     if (!data.existing_player_id) {
       throw new Error('Sélectionnez votre pseudo dans la liste.');
     }
+    validateConditions();
     return;
   }
 
@@ -360,12 +364,7 @@ function validateStep1(data) {
     throw new Error('Veuillez remplir tous les champs obligatoires.');
   }
   validateAvatarFile(data.avatarFile);
-  const conditions = document.querySelectorAll('#conditionsSection input[type="checkbox"][required]');
-  for (const checkbox of conditions) {
-    if (!checkbox.checked) {
-      throw new Error('Veuillez accepter toutes les conditions.');
-    }
-  }
+  validateConditions();
 }
 
 function renderRecap() {

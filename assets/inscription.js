@@ -5,6 +5,7 @@ const formState = {
   ticketTypes: [],
   purchasedTicket: null,
   qrDownloadBlob: null,
+  existingPlayers: [],
 };
 
 function getConfig() {
@@ -136,20 +137,105 @@ function updateStepIndicator(step) {
   });
 }
 
+function isReturningParticipantMode() {
+  return document.getElementById('ancien_participant')?.checked === true;
+}
+
+function getSelectedExistingPlayer() {
+  const playerId = formState.data?.existing_player_id;
+  if (!playerId) return null;
+  return formState.existingPlayers.find((player) => player.id === playerId) || null;
+}
+
+async function loadExistingPlayers() {
+  if (!window.togwSupabase) return;
+
+  const select = document.getElementById('existingPlayerSelect');
+  if (select) {
+    select.innerHTML = '<option value="">Chargement des joueurs...</option>';
+  }
+
+  const { data, error } = await window.togwSupabase
+    .from('players')
+    .select('id, name')
+    .order('name', { ascending: true });
+
+  if (error) throw error;
+
+  formState.existingPlayers = data || [];
+  renderExistingPlayerOptions();
+}
+
+function renderExistingPlayerOptions() {
+  const select = document.getElementById('existingPlayerSelect');
+  if (!select) return;
+
+  if (!formState.existingPlayers.length) {
+    select.innerHTML = '<option value="">Aucun joueur trouvé</option>';
+    return;
+  }
+
+  select.innerHTML = [
+    '<option value="">Sélectionnez votre pseudo</option>',
+    ...formState.existingPlayers.map(
+      (player) => `<option value="${player.id}">${player.name}</option>`
+    ),
+  ].join('');
+}
+
+function setFieldsDisabled(container, disabled) {
+  if (!container) return;
+  container.querySelectorAll('input, select, textarea, button').forEach((field) => {
+    if (field.id === 'ancien_participant') return;
+    field.disabled = disabled;
+  });
+}
+
+function updateReturningParticipantUi() {
+  const returning = isReturningParticipantMode();
+  const newFields = document.getElementById('newParticipantFields');
+  const conditions = document.getElementById('conditionsSection');
+  const existingBlock = document.getElementById('existingPlayerBlock');
+  const existingSelect = document.getElementById('existingPlayerSelect');
+
+  if (existingBlock) {
+    existingBlock.classList.toggle('hidden', !returning);
+  }
+
+  setFieldsDisabled(newFields, returning);
+  setFieldsDisabled(conditions, returning);
+
+  if (existingSelect) {
+    existingSelect.disabled = !returning;
+    existingSelect.required = returning;
+    if (!returning) existingSelect.value = '';
+  }
+
+  conditions?.querySelectorAll('input[type="checkbox"][required]').forEach((checkbox) => {
+    checkbox.required = !returning;
+  });
+
+  newFields?.querySelectorAll('input[required]').forEach((input) => {
+    input.required = !returning;
+  });
+}
+
 function collectStep1Data(form) {
   const formData = new FormData(form);
   const avatarInput = form.querySelector('#avatarInput');
   const avatarFile = avatarInput?.files?.[0] || null;
+  const returning = formData.get('ancien_participant') === 'on';
 
   return {
-    nom: formData.get('nom').trim(),
-    prenom: formData.get('prenom').trim(),
+    nom: formData.get('nom')?.trim() || '',
+    prenom: formData.get('prenom')?.trim() || '',
     pseudo: formData.get('pseudo')?.trim() || '',
-    adresse: formData.get('adresse').trim(),
-    telephone: formData.get('telephone').trim(),
+    adresse: formData.get('adresse')?.trim() || '',
+    telephone: formData.get('telephone')?.trim() || '',
     email: formData.get('email')?.trim() || '',
-    ancien_participant: formData.get('ancien_participant') === 'on',
-    avatarFile,
+    ancien_participant: returning,
+    existing_player_id: returning ? formData.get('existing_player_id') || '' : '',
+    avatarFile: returning ? null : avatarFile,
   };
 }
 
@@ -259,11 +345,22 @@ async function uploadPlayerAvatar(file) {
 }
 
 function validateStep1(data) {
-  if (!data.nom || !data.prenom || !data.adresse || !data.telephone) {
+  if (!data.telephone) {
+    throw new Error('Veuillez indiquer votre numéro de téléphone.');
+  }
+
+  if (data.ancien_participant) {
+    if (!data.existing_player_id) {
+      throw new Error('Sélectionnez votre pseudo dans la liste.');
+    }
+    return;
+  }
+
+  if (!data.nom || !data.prenom || !data.adresse) {
     throw new Error('Veuillez remplir tous les champs obligatoires.');
   }
   validateAvatarFile(data.avatarFile);
-  const conditions = document.querySelectorAll('#step1Panel input[type="checkbox"][required]');
+  const conditions = document.querySelectorAll('#conditionsSection input[type="checkbox"][required]');
   for (const checkbox of conditions) {
     if (!checkbox.checked) {
       throw new Error('Veuillez accepter toutes les conditions.');
@@ -277,11 +374,20 @@ function renderRecap() {
   const amount = getDisplayAmount(formState.data.ancien_participant);
   if (!recap || !formState.data) return;
 
-  recap.innerHTML = `
-    <p class="font-bold text-on-surface">${formState.data.prenom} ${formState.data.nom}</p>
-    <p class="text-sm text-on-surface-variant">${formState.data.telephone}${formState.data.email ? ` · ${formState.data.email}` : ''}</p>
-    <p class="text-sm text-on-surface-variant mt-2">${ticketType?.name || getConfig().TICKET_TYPE_NAME} · ${formatPrix(amount)}</p>
-  `;
+  if (formState.data.ancien_participant) {
+    const player = getSelectedExistingPlayer();
+    recap.innerHTML = `
+      <p class="font-bold text-on-surface">${player?.name || 'Joueur existant'}</p>
+      <p class="text-sm text-on-surface-variant">${formState.data.telephone}</p>
+      <p class="text-sm text-on-surface-variant mt-2">Ancien participant · ${ticketType?.name || getConfig().TICKET_TYPE_NAME} · ${formatPrix(amount)}</p>
+    `;
+  } else {
+    recap.innerHTML = `
+      <p class="font-bold text-on-surface">${formState.data.prenom} ${formState.data.nom}</p>
+      <p class="text-sm text-on-surface-variant">${formState.data.telephone}${formState.data.email ? ` · ${formState.data.email}` : ''}</p>
+      <p class="text-sm text-on-surface-variant mt-2">${ticketType?.name || getConfig().TICKET_TYPE_NAME} · ${formatPrix(amount)}</p>
+    `;
+  }
 
   const amountEl = document.getElementById('paymentAmount');
   if (amountEl) amountEl.textContent = formatPrix(amount);
@@ -375,14 +481,15 @@ function goToStep1() {
 function buildPurchasePayload(paymentMethod, transactionId) {
   const data = formState.data;
   const ticketType = resolveTicketType(data.ancien_participant);
+  const existingPlayer = getSelectedExistingPlayer();
 
   return {
     ticket_type_id: String(ticketType.id),
     quantity: 1,
-    buyer_name: `${data.prenom} ${data.nom}`,
+    buyer_name: existingPlayer?.name || `${data.prenom} ${data.nom}`.trim(),
     buyer_phone: data.telephone,
     buyer_email: data.email || null,
-    buyer_address: data.adresse || null,
+    buyer_address: data.ancien_participant ? null : data.adresse || null,
     transaction_id: transactionId.trim(),
     total_amount: Number(ticketType.price),
     payment_method: Number(paymentMethod),
@@ -427,6 +534,52 @@ async function checkDuplicate(playerName) {
 
   if (participantError) throw participantError;
   return Boolean(participants?.length);
+}
+
+async function registerExistingPlayer(options = {}) {
+  ensureSupabaseReady();
+
+  const data = formState.data;
+  const playerId = data.existing_player_id;
+  const participantStatus = options.status || 'pending';
+
+  if (!playerId) {
+    throw new Error('Sélectionnez votre pseudo dans la liste.');
+  }
+
+  const { data: participants, error: checkError } = await window.togwSupabase
+    .from('tournament_participants')
+    .select('id')
+    .eq('tournament_id', getConfig().TOURNAMENT_ID)
+    .eq('player_id', playerId)
+    .limit(1);
+
+  if (checkError) throw checkError;
+  if (participants?.length) {
+    const duplicateError = new Error('DUPLICATE');
+    duplicateError.code = 'DUPLICATE';
+    throw duplicateError;
+  }
+
+  const { error: participantError } = await window.togwSupabase
+    .from('tournament_participants')
+    .insert({
+      tournament_id: getConfig().TOURNAMENT_ID,
+      player_id: playerId,
+      status: participantStatus,
+    });
+
+  if (participantError) {
+    if (participantError.code === '23505') {
+      const duplicateError = new Error('DUPLICATE');
+      duplicateError.code = 'DUPLICATE';
+      throw duplicateError;
+    }
+    throw participantError;
+  }
+
+  const player = getSelectedExistingPlayer();
+  return { id: playerId, name: player?.name || 'Joueur' };
 }
 
 async function saveToSupabase(options = {}) {
@@ -646,9 +799,15 @@ async function handleAdminSubmit() {
     validateStep1(data);
     formState.data = data;
     ensureSupabaseReady();
-    await saveToSupabase({ status: 'confirmed' });
+    if (data.ancien_participant) {
+      await registerExistingPlayer({ status: 'confirmed' });
+    } else {
+      await saveToSupabase({ status: 'confirmed' });
+    }
     form.reset();
+    document.getElementById('ancien_participant').checked = true;
     resetAvatarField();
+    updateReturningParticipantUi();
     showPanel('adminSuccessMessage');
   } catch (err) {
     if (err.code === 'DUPLICATE') {
@@ -683,7 +842,9 @@ async function handlePaymentSubmit(event) {
 
     const payload = buildPurchasePayload(paymentMethod, transactionId);
     const purchaseResult = await purchaseTicket(payload);
-    const player = await saveToSupabase();
+    const player = formState.data.ancien_participant
+      ? await registerExistingPlayer()
+      : await saveToSupabase();
     const ticket =
       extractPurchasedTicket(purchaseResult) || {
         id: player.id,
@@ -719,12 +880,23 @@ function setupInscriptionWizard() {
   document.getElementById('paymentForm')?.addEventListener('submit', handlePaymentSubmit);
   document.getElementById('btn-admin-new-registration')?.addEventListener('click', () => {
     document.getElementById('inscriptionForm')?.reset();
+    document.getElementById('ancien_participant').checked = true;
     resetAvatarField();
+    updateReturningParticipantUi();
     formState.data = null;
     formState.step = 1;
     updateStepIndicator(1);
     showPanel('step1Panel');
   });
+
+  document.getElementById('inscriptionForm')?.addEventListener('reset', () => {
+    window.setTimeout(() => {
+      document.getElementById('ancien_participant').checked = true;
+      updateReturningParticipantUi();
+    }, 0);
+  });
+
+  document.getElementById('ancien_participant')?.addEventListener('change', updateReturningParticipantUi);
 
   window.TOGWAuth?.onAuthChange?.(() => applyTogwAdminInscriptionUi());
 
@@ -746,6 +918,8 @@ function setupInscriptionWizard() {
   });
 
   setupAvatarField();
+  updateReturningParticipantUi();
+  loadExistingPlayers().catch((err) => console.error('Chargement joueurs:', err));
   updateStepIndicator(1);
   showPanel('step1Panel');
   showSetupWarnings();

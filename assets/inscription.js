@@ -14,24 +14,27 @@ function getConfig() {
 
 function getDisplayAmount(ancienParticipant) {
   const config = getConfig();
-  if (ancienParticipant) return config.PRICE_RETURNING;
-  const ticketType = resolveTicketType({ throwOnMissing: false });
-  return ticketType ? Number(ticketType.price) : config.PRICE_NEW;
+  const ticketType = resolveTicketType(ancienParticipant, { throwOnMissing: false });
+  if (ticketType) return Number(ticketType.price);
+  return ancienParticipant ? config.PRICE_RETURNING : config.PRICE_NEW;
 }
 
-function resolveTicketType(options = { throwOnMissing: true }) {
+function resolveTicketType(ancienParticipant = false, options = { throwOnMissing: true }) {
   const config = getConfig();
-  const ticketType = formState.ticketTypes.find(
-    (type) => String(type.id) === String(config.TICKET_TYPE_ID)
-  );
+  const targetId = ancienParticipant ? config.TICKET_TYPE_ID_RETURNING : config.TICKET_TYPE_ID;
+  const targetName = ancienParticipant
+    ? config.TICKET_TYPE_NAME_RETURNING || config.TICKET_TYPE_NAME
+    : config.TICKET_TYPE_NAME;
+
+  const ticketType = formState.ticketTypes.find((type) => String(type.id) === String(targetId));
   if (!ticketType && options.throwOnMissing) {
     const available = formState.ticketTypes
       .map((type) => `${type.name} (id ${type.id}, ${formatPrix(type.price)})`)
       .join(', ');
     throw new Error(
       available
-        ? `Le billet « ${config.TICKET_TYPE_NAME} » (id ${config.TICKET_TYPE_ID}) est introuvable ou inactif dans ToliarEvent. Billets actifs : ${available}.`
-        : `Le billet « ${config.TICKET_TYPE_NAME} » (id ${config.TICKET_TYPE_ID}) est introuvable ou inactif dans ToliarEvent.`
+        ? `Le billet « ${targetName} » (id ${targetId}) est introuvable ou inactif dans ToliarEvent. Billets actifs : ${available}.`
+        : `Le billet « ${targetName} » (id ${targetId}) est introuvable ou inactif dans ToliarEvent.`
     );
   }
   return ticketType || null;
@@ -367,7 +370,7 @@ function validateStep1(data) {
 
 function renderRecap() {
   const recap = document.getElementById('paymentRecap');
-  const ticketType = resolveTicketType({ throwOnMissing: false });
+  const ticketType = resolveTicketType(formState.data.ancien_participant, { throwOnMissing: false });
   const amount = getDisplayAmount(formState.data.ancien_participant);
   if (!recap || !formState.data) return;
 
@@ -376,7 +379,7 @@ function renderRecap() {
     recap.innerHTML = `
       <p class="font-bold text-on-surface">${player?.name || 'Joueur existant'}</p>
       <p class="text-sm text-on-surface-variant">${formState.data.telephone}</p>
-      <p class="text-sm text-on-surface-variant mt-2">Ancien participant · ${ticketType?.name || getConfig().TICKET_TYPE_NAME} · ${formatPrix(amount)}</p>
+      <p class="text-sm text-on-surface-variant mt-2">Ancien participant · ${ticketType?.name || getConfig().TICKET_TYPE_NAME_RETURNING || getConfig().TICKET_TYPE_NAME} · ${formatPrix(amount)}</p>
     `;
   } else {
     recap.innerHTML = `
@@ -402,7 +405,7 @@ async function loadEventTicketTypes() {
   }
 
   formState.ticketTypes = result.ticketTypes || [];
-  resolveTicketType();
+  resolveTicketType(formState.data?.ancien_participant);
   return formState.ticketTypes;
 }
 
@@ -477,7 +480,7 @@ function goToStep1() {
 
 function buildPurchasePayload(paymentMethod, transactionId) {
   const data = formState.data;
-  const ticketType = resolveTicketType();
+  const ticketType = resolveTicketType(data.ancien_participant);
   const existingPlayer = getSelectedExistingPlayer();
 
   return {
@@ -488,7 +491,7 @@ function buildPurchasePayload(paymentMethod, transactionId) {
     buyer_email: data.email || null,
     buyer_address: data.ancien_participant ? null : data.adresse || null,
     transaction_id: transactionId.trim(),
-    total_amount: getDisplayAmount(data.ancien_participant),
+    total_amount: Number(ticketType.price),
     payment_method: Number(paymentMethod),
   };
 }
@@ -846,7 +849,9 @@ async function handlePaymentSubmit(event) {
       extractPurchasedTicket(purchaseResult) || {
         id: player.id,
         number: '—',
-        ticket_type: getConfig().TICKET_TYPE_NAME,
+        ticket_type: formState.data.ancien_participant
+          ? getConfig().TICKET_TYPE_NAME_RETURNING || getConfig().TICKET_TYPE_NAME
+          : getConfig().TICKET_TYPE_NAME,
       };
 
     await renderQrCode(ticket);
